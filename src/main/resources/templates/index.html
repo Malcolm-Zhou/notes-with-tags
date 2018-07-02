@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>index</title>
+</head>
+<body>
+    <div>
+        <a href="/init" >初始化数据</a>
+    </div>
+    <div>
+        <table class="table table-striped" style="width: 100%">
+            <tr style="height: 40px; background-color: #f7ecb5">
+                <th class="text-center col-md-1">Id</th>
+                <th class="text-center col-md-6">Title</th>
+                <th class="text-center col-md-5">Tags</th>
+            </tr>
+            <tr th:each="note:${notes}" class="text-center" style="height: 40px">
+                <td class="col-md-1"><a href="#" th:href="'/addNote?orderId=' + ${note.getId()} + '&tagName=testTag'"><span th:text="${note.getId()}"></span></a></td>
+                <td class="col-md-6"><span th:text="${note.getTitle()}"></span></td>
+                <td class="col-md-5"><span style="width: 15%" th:each="tag:${note.getTags()} " th:text="${tag.getName()}"></span></td>
+            </tr>
+        </table>
+    </div>
+
+</body>
+<link rel="stylesheet" href="/static/css/bootstrap.css" >
+
+</html>
