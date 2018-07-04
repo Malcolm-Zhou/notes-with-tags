@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,7 +24,9 @@ public class HomeController {
     @RequestMapping("/")
     public String index(Model model) {
         List<Note> notes = noteService.findAll();
+//        List<String> tagClasses = Arrays.asList("label-primary", "label-success" , "label-info", "label-warning", "label-danger");
         model.addAttribute("notes", notes);
+//        model.addAttribute("tagClasses", tagClasses);
         return "index";
     }
 
