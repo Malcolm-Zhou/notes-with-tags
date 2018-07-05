@@ -30,11 +30,23 @@ public class HomeController {
         return "index";
     }
 
-    @RequestMapping("/updateNote")
+    @RequestMapping("/updateNotePage")
     public String updateNote(@RequestParam final String id, Model model) {
         Note note = noteService.getById(id);
         model.addAttribute("note", note);
         return "note-details";
+    }
+    @RequestMapping("/updateNote")
+    public String updateNote(HttpServletRequest request, Model model) {
+        String noteId = request.getParameter("noteId");
+        String title = request.getParameter("title");
+        String content = request.getParameter("content");
+        Note note = new Note();
+        note.setId(Integer.valueOf(noteId));
+        note.setTitle(title);
+        note.setContent(content);
+        noteService.update(note);
+        return "redirect:/updateNotePage?id=" + noteId;
     }
 
     @RequestMapping("/deleteTag")

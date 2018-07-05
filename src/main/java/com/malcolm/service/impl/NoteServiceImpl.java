@@ -69,6 +69,15 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
+    public void update(Note note) {
+        Note searchedNote = getById(note.getId().toString());
+        searchedNote.setTitle(note.getTitle());
+        searchedNote.setContent(note.getContent());
+        noteDao.save(searchedNote);
+    }
+
+
+    @Override
     public void createNote(Note note) {
         noteDao.save(note);
     }

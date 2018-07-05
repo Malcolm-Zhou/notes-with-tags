@@ -1,3 +1,10 @@
 .tag {
     margin: 0px 1px;
 }
+
+.header-row{
+    background-color: #337ab7 !important;
+}
+.header-row th{
+    color: #fff;
+}

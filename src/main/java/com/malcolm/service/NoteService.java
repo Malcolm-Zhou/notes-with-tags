@@ -19,5 +19,7 @@ public interface NoteService {
 
     void clearAll();
 
+    void update(Note note);
+
     void createNote(Note note);
 }
