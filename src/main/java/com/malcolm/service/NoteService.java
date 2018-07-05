@@ -11,7 +11,11 @@ import java.util.List;
 public interface NoteService {
     List<Note> findAll();
 
+    Note getById(String id);
+
     void addTag(String noteId, String tagName);
+
+    void deleteTagInNote(String noteId, String tagId);
 
     void clearAll();
 

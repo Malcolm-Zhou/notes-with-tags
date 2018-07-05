@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>编辑笔记</title>
+</head>
+<body>
+<div class="col-md-2"></div>
+<div class="col-md-8">
+    <form>
+        <div class="form-group">
+            <label for="title">标题</label>
+            <input type="text" class="form-control" id="title" th:value="${note.title}">
+        </div>
+        <div class="form-group">
+            <label>标签</label>
+            <button type="button" class="tag btn btn-primary btn-sm" th:each="tag:${note.tags}" th:text="${tag.name}" th:tag-id="${tag.id}"></button>
+            <span style="float: right">
+                <input type="checkbox" id="delete-tag-mode"><label for="delete-tag-mode">删除模式</label>
+            </span>
+        </div>
+        <div>
+            <label for="content">内容</label>
+            <textarea class="form-control" id="content" rows="20" th:utext="${note.content}"></textarea>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-default">保存</button>
+        </div>
+
+    </form>
+</div>
+<div class="col-md-2"></div>
+<div hidden="hidden">
+    <input id="noteId" th:value="${note.id}">
+</div>
+</body>
+<link rel="stylesheet" href="/static/css/bootstrap.css">
+<link rel="stylesheet" href="/static/css/note-details.css">
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/bootstrap.js"></script>
+<script src="/static/js/note-details.js"></script>
+</html>

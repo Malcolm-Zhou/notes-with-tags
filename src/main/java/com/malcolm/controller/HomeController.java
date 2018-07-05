@@ -7,6 +7,8 @@ import com.malcolm.service.TagService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -24,10 +26,22 @@ public class HomeController {
     @RequestMapping("/")
     public String index(Model model) {
         List<Note> notes = noteService.findAll();
-//        List<String> tagClasses = Arrays.asList("label-primary", "label-success" , "label-info", "label-warning", "label-danger");
         model.addAttribute("notes", notes);
-//        model.addAttribute("tagClasses", tagClasses);
         return "index";
+    }
+
+    @RequestMapping("/updateNote")
+    public String updateNote(@RequestParam final String id, Model model) {
+        Note note = noteService.getById(id);
+        model.addAttribute("note", note);
+        return "note-details";
+    }
+
+    @RequestMapping("/deleteTag")
+    @ResponseBody
+    public String deleteTag(@RequestParam String noteId, @RequestParam String tagId) {
+        noteService.deleteTagInNote(noteId, tagId);
+        return "success";
     }
 
     @RequestMapping("/addNote")
@@ -43,12 +57,15 @@ public class HomeController {
         noteService.clearAll();
         tagService.clearAll();
 
+        Tag tag1 = new Tag("tag1");
+        Tag tag2 = new Tag("tag2");
+        tagService.createTag(tag1);
+        tagService.createTag(tag2);
         for (int i = 0; i < 10; i++) {
             Note note = new Note("测试笔记" + i, "测试内容" + i);
-            Tag tag1 = new Tag("tag1");
-            tag1.getNotes().add(note);
-            Tag tag2 = new Tag("tag2");
-            tag2.getNotes().add(note);
+
+//            tag1.getNotes().add(note);
+//            tag2.getNotes().add(note);
             note.getTags().addAll(Arrays.asList(tag2, tag1));
             noteService.createNote(note);
         }
