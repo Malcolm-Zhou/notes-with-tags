@@ -11,6 +11,8 @@ import java.util.List;
 public interface NoteService {
     List<Note> findAll();
 
+    List<Note> findByTitle(String title);
+
     Note getById(String id);
 
     void addTag(String noteId, String tagName);

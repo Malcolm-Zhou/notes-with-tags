@@ -29,6 +29,11 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
+    public List<Note> findByTitle(String title) {
+        return noteDao.findByTitleContaining(title);
+    }
+
+    @Override
     public Note getById(String id) {
         return noteDao.getOne(Integer.valueOf(id));
     }

@@ -12,9 +12,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class HomeController {
@@ -26,6 +27,19 @@ public class HomeController {
     @RequestMapping("/")
     public String index(Model model) {
         List<Note> notes = noteService.findAll();
+        model.addAttribute("notes", notes);
+        return "index";
+    }
+    @RequestMapping("/searchByTitle")
+    public String searchByTitle(@RequestParam final String title, Model model) {
+        List<Note> notes = noteService.findByTitle(title);
+        model.addAttribute("notes", notes);
+        return "index";
+    }
+    @RequestMapping("/searchByTag")
+    public String searchByTag(@RequestParam final String id, Model model) {
+        List<Note> notes = tagService.findNotesByTagId(id);
+        notes = notes.stream().sorted(Comparator.comparing(Note::getId)).collect(Collectors.toList());
         model.addAttribute("notes", notes);
         return "index";
     }

@@ -10,4 +10,6 @@ import java.util.List;
  */
 public interface NoteDao extends JpaRepository<Note, Integer> {
     List<Note> findByTitleContaining(String title);
+
+    List<Note> findByTitleLike(String title);
 }

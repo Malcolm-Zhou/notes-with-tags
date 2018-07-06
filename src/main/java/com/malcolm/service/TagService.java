@@ -1,5 +1,6 @@
 package com.malcolm.service;
 
+import com.malcolm.bean.Note;
 import com.malcolm.bean.Tag;
 
 import java.util.List;
@@ -9,6 +10,8 @@ import java.util.List;
  */
 public interface TagService {
     List<Tag> findAll();
+
+    List<Note> findNotesByTagId(String tagId);
 
     Tag findByName(String name);
 

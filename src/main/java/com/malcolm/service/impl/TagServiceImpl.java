@@ -1,5 +1,6 @@
 package com.malcolm.service.impl;
 
+import com.malcolm.bean.Note;
 import com.malcolm.bean.Tag;
 import com.malcolm.repository.TagDao;
 import com.malcolm.service.TagService;
@@ -19,6 +20,12 @@ public class TagServiceImpl implements TagService {
     @Override
     public List<Tag> findAll() {
         return tagDao.findAll();
+    }
+
+    @Override
+    public List<Note> findNotesByTagId(String tagId) {
+        Tag tag = getById(tagId);
+        return tag.getNotes();
     }
 
     @Override

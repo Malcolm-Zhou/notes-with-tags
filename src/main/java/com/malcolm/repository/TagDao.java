@@ -10,5 +10,6 @@ import java.util.List;
  */
 public interface TagDao extends JpaRepository<Tag, Integer> {
     Tag findByNameEquals(String name);
+
     List<Tag> findByNameContaining(String name);
 }
