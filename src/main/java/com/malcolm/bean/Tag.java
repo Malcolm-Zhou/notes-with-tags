@@ -1,9 +1,12 @@
 package com.malcolm.bean;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
@@ -20,6 +23,20 @@ public class Tag {
 
     @ManyToMany(mappedBy = "tags")
     private List<Note> notes;
+
+    /**
+     * 创建时间
+     */
+    @CreatedDate
+    @Column(name = "create_time")
+    private Date createTime;
+
+    /**
+     * 修改时间
+     */
+    @LastModifiedDate
+    @Column(name = "modify_time")
+    private Date modifyTime;
 
     public Tag() {
         notes = new ArrayList<>();
@@ -63,5 +80,21 @@ public class Tag {
     @JsonBackReference
     public void setNotes(List<Note> notes) {
         this.notes = notes;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getModifyTime() {
+        return modifyTime;
+    }
+
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
     }
 }

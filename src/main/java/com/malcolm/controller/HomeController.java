@@ -25,21 +25,19 @@ public class HomeController {
     private TagService tagService;
 
     @RequestMapping("/")
-    public String index(Model model) {
-        List<Note> notes = noteService.findAll();
-        model.addAttribute("notes", notes);
-        return "index";
+    public String index() {
+        return "redirect:/searchByTitle?title=&page=0";
     }
+
     @RequestMapping("/searchByTitle")
-    public String searchByTitle(@RequestParam final String title, Model model) {
-        List<Note> notes = noteService.findByTitle(title);
+    public String searchByTitle(@RequestParam(required = false, defaultValue = "") final String title, @RequestParam(required = false, defaultValue = "0") final Integer page, Model model) {
+        List<Note> notes = noteService.findByTitlePaging(title, page);
         model.addAttribute("notes", notes);
         return "index";
     }
     @RequestMapping("/searchByTag")
-    public String searchByTag(@RequestParam final String id, Model model) {
-        List<Note> notes = tagService.findNotesByTagId(id);
-        notes = notes.stream().sorted(Comparator.comparing(Note::getId)).collect(Collectors.toList());
+    public String searchByTag(@RequestParam final String id, @RequestParam(required = false, defaultValue = "0") final Integer page, Model model) {
+        List<Note> notes = noteService.findByTagsContaining(id, page);
         model.addAttribute("notes", notes);
         return "index";
     }
@@ -87,7 +85,7 @@ public class HomeController {
         Tag tag2 = new Tag("tag2");
         tagService.createTag(tag1);
         tagService.createTag(tag2);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 25; i++) {
             Note note = new Note("测试笔记" + i, "测试内容" + i);
 
 //            tag1.getNotes().add(note);

@@ -11,7 +11,7 @@ import java.util.List;
 public interface TagService {
     List<Tag> findAll();
 
-    List<Note> findNotesByTagId(String tagId);
+    List<Note> findNotesByTagIdPaging(String tagId, Integer page);
 
     Tag findByName(String name);
 

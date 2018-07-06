@@ -7,7 +7,9 @@ import com.malcolm.service.TagService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -23,9 +25,12 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Note> findNotesByTagId(String tagId) {
+    public List<Note> findNotesByTagIdPaging(String tagId, Integer page) {
         Tag tag = getById(tagId);
-        return tag.getNotes();
+        List<Note> notes = tag.getNotes();
+        notes = notes.stream().sorted(Comparator.comparing(Note::getId)).collect(Collectors.toList());
+
+        return notes;
     }
 
     @Override

@@ -9,11 +9,12 @@ import java.util.List;
  *
  */
 public interface NoteService {
-    List<Note> findAll();
 
-    List<Note> findByTitle(String title);
+    List<Note> findByTitlePaging(String title, Integer page);
 
     Note getById(String id);
+
+    List<Note> findByTagsContaining(String tagId, Integer page);
 
     void addTag(String noteId, String tagName);
 

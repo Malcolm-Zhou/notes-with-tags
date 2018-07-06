@@ -1,8 +1,11 @@
 package com.malcolm.bean;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,6 +26,20 @@ public class Note {
             @JoinColumn(name = "NOTE_ID", referencedColumnName = "ID")}, inverseJoinColumns = {
             @JoinColumn(name = "TAG_ID", referencedColumnName = "ID")})
     private List<Tag> tags;
+
+    /**
+     * 创建时间
+     */
+    @CreatedDate
+    @Column(name = "create_time")
+    private Date createTime;
+
+    /**
+     * 修改时间
+     */
+    @LastModifiedDate
+    @Column(name = "modify_time")
+    private Date modifyTime;
 
     public Note() {
         tags = new ArrayList<>();
@@ -76,5 +93,21 @@ public class Note {
 
     public void setTags(List<Tag> tags) {
         this.tags = tags;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getModifyTime() {
+        return modifyTime;
+    }
+
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
     }
 }

@@ -3,15 +3,17 @@ package com.malcolm.service.impl;
 import com.malcolm.bean.Note;
 import com.malcolm.bean.Tag;
 import com.malcolm.repository.NoteDao;
-import com.malcolm.repository.TagDao;
 import com.malcolm.service.NoteService;
 import com.malcolm.service.TagService;
+import org.springframework.core.env.Environment;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -24,13 +26,14 @@ public class NoteServiceImpl implements NoteService {
     @Resource
     private TagService tagService;
 
-    public List<Note> findAll() {
-        return noteDao.findAll();
-    }
+    @Resource
+    private Environment env;
 
     @Override
-    public List<Note> findByTitle(String title) {
-        return noteDao.findByTitleContaining(title);
+    public List<Note> findByTitlePaging(String title, Integer page) {
+        String size = env.getProperty("paging.size");
+        Pageable pageable = PageRequest.of(page, Integer.valueOf(size), Sort.Direction.ASC, "id");
+        return noteDao.findByTitleContaining(title, pageable).getContent();
     }
 
     @Override
@@ -38,17 +41,24 @@ public class NoteServiceImpl implements NoteService {
         return noteDao.getOne(Integer.valueOf(id));
     }
 
+    @Override
+    public List<Note> findByTagsContaining(String tagId, Integer page) {
+        Tag tag = tagService.getById(tagId);
+        String size = env.getProperty("paging.size");
+        Pageable pageable = PageRequest.of(page, Integer.valueOf(size), Sort.Direction.ASC, "id");
+        return noteDao.findByTagsContaining(tag, pageable).getContent();
+    }
+
     public void addTag(String noteId, String tagName) {
         Tag tag = tagService.findByName(tagName);
-        if(null == tag){
+        if (null == tag) {
             tag = tagService.createTag(new Tag(tagName));
             tagService.save(tag);
         }
         Note note = getById(noteId);
-        if(null != note){
+        if (null != note) {
             List<Tag> tags = note.getTags();
-            if(tags.contains(tag))
-            {
+            if (tags.contains(tag)) {
                 return;
             }
             tags.add(tag);
