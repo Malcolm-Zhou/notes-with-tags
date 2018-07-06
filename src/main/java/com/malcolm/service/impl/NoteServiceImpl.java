@@ -6,6 +6,7 @@ import com.malcolm.repository.NoteDao;
 import com.malcolm.service.NoteService;
 import com.malcolm.service.TagService;
 import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -30,10 +31,10 @@ public class NoteServiceImpl implements NoteService {
     private Environment env;
 
     @Override
-    public List<Note> findByTitlePaging(String title, Integer page) {
+    public Page<Note> findByTitlePaging(String title, Integer page) {
         String size = env.getProperty("paging.size");
         Pageable pageable = PageRequest.of(page, Integer.valueOf(size), Sort.Direction.ASC, "id");
-        return noteDao.findByTitleContaining(title, pageable).getContent();
+        return noteDao.findByTitleContaining(title, pageable);
     }
 
     @Override
@@ -42,11 +43,11 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public List<Note> findByTagsContaining(String tagId, Integer page) {
+    public Page<Note> findByTagsContaining(String tagId, Integer page) {
         Tag tag = tagService.getById(tagId);
         String size = env.getProperty("paging.size");
         Pageable pageable = PageRequest.of(page, Integer.valueOf(size), Sort.Direction.ASC, "id");
-        return noteDao.findByTagsContaining(tag, pageable).getContent();
+        return noteDao.findByTagsContaining(tag, pageable);
     }
 
     public void addTag(String noteId, String tagName) {

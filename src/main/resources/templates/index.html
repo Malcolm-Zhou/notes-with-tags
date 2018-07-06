@@ -33,7 +33,7 @@
             <td class="col-md-4"><a th:href="'/updateNotePage?id=' + ${note.id}"><span
                     th:text="${note.title}"></span></a></td>
             <td class="col-md-3"><a th:href="'/searchByTag?id=' + ${tag.id}" th:each="tag:${note.tags}"><span
-                    class="tag label label-primary" style="width: 15%" th:text="${tag.name}"></span></a></td>
+                    class="tag label label-primary" th:text="${tag.name}"></span></a></td>
             <td class="col-md-2" th:text="${#dates.format(note.createTime, 'yyyy-MM-dd HH:mm')}"></td>
             <td class="col-md-2" th:text="${#dates.format(note.modifyTime, 'yyyy-MM-dd HH:mm')}"></td>
         </tr>
@@ -47,11 +47,9 @@
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
-            <li><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
+            <li th:class="${currentPage+1 == pageIndex?'active':''}" th:each="pageIndex:${#numbers.sequence(1,totalPages)}">
+                <a href="#" th:href="${navUrlPrefix + (pageIndex - 1)}" th:text="${pageIndex}"></a>
+            </li>
             <li>
                 <a href="#" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>

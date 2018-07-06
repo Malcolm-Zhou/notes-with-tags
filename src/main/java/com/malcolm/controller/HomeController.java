@@ -4,6 +4,7 @@ import com.malcolm.bean.Note;
 import com.malcolm.bean.Tag;
 import com.malcolm.service.NoteService;
 import com.malcolm.service.TagService;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,14 +32,25 @@ public class HomeController {
 
     @RequestMapping("/searchByTitle")
     public String searchByTitle(@RequestParam(required = false, defaultValue = "") final String title, @RequestParam(required = false, defaultValue = "0") final Integer page, Model model) {
-        List<Note> notes = noteService.findByTitlePaging(title, page);
+        Page<Note> notePage = noteService.findByTitlePaging(title, page);
+        List<Note> notes = notePage.getContent();
+        int totalPages = notePage.getTotalPages();
         model.addAttribute("notes", notes);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("navUrlPrefix", "/searchByTitle?title=" + title + "&page=");
         return "index";
     }
+
     @RequestMapping("/searchByTag")
     public String searchByTag(@RequestParam final String id, @RequestParam(required = false, defaultValue = "0") final Integer page, Model model) {
-        List<Note> notes = noteService.findByTagsContaining(id, page);
+        Page<Note> notePage = noteService.findByTagsContaining(id, page);
+        List<Note> notes = notePage.getContent();
+        int totalPages = notePage.getTotalPages();
         model.addAttribute("notes", notes);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("navUrlPrefix", "/searchByTag?id=" + id + "&page=");
         return "index";
     }
 
@@ -48,6 +60,7 @@ public class HomeController {
         model.addAttribute("note", note);
         return "note-details";
     }
+
     @RequestMapping("/updateNote")
     public String updateNote(HttpServletRequest request, Model model) {
         String noteId = request.getParameter("noteId");
