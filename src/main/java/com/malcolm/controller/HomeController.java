@@ -62,7 +62,7 @@ public class HomeController {
     }
 
     @RequestMapping("/updateNote")
-    public String updateNote(HttpServletRequest request, Model model) {
+    public String updateNote(HttpServletRequest request) {
         String noteId = request.getParameter("noteId");
         String title = request.getParameter("title");
         String content = request.getParameter("content");
@@ -106,7 +106,18 @@ public class HomeController {
             note.getTags().addAll(Arrays.asList(tag2, tag1));
             noteService.createNote(note);
         }
+        for (int i = 0; i < 50; i++) {
+            Tag testTag = new Tag("testTag" + i);
+            tagService.createTag(testTag);
+        }
         return "redirect:/";
+    }
+
+    @RequestMapping("/allTags")
+    public String allTags(Model model) {
+        List<Tag> allTags = tagService.findAll();
+        model.addAttribute("tags", allTags);
+        return "tag-list";
     }
 
 

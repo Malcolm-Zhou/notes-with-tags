@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <ul>
+            <li class="tag btn btn-primary btn-sm" th:each="tag:${tags}" th:text="${tag.name}" th:tag-id="${tag.id}"></li>
+        </ul>
+    </div>
+    <div class="col-md-2"></div>
+</body>
+<link rel="stylesheet" href="/static/css/bootstrap.css">
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/bootstrap.js"></script>
+</html>

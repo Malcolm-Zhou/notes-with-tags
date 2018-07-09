@@ -24,14 +24,6 @@ public class TagServiceImpl implements TagService {
         return tagDao.findAll();
     }
 
-    @Override
-    public List<Note> findNotesByTagIdPaging(String tagId, Integer page) {
-        Tag tag = getById(tagId);
-        List<Note> notes = tag.getNotes();
-        notes = notes.stream().sorted(Comparator.comparing(Note::getId)).collect(Collectors.toList());
-
-        return notes;
-    }
 
     @Override
     public Tag findByName(String name) {

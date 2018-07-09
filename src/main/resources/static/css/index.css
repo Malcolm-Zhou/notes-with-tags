@@ -8,3 +8,10 @@
 .header-row th{
     color: #fff;
 }
+
+.search-bar{
+    float: left;
+}
+.search-tag{
+    float: right;
+}
