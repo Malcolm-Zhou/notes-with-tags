@@ -39,6 +39,7 @@ public class HomeController {
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", page);
         model.addAttribute("navUrlPrefix", "/searchByTitle?title=" + title + "&page=");
+        model.addAttribute("title", title);
         return "index";
     }
 
@@ -81,12 +82,11 @@ public class HomeController {
         return "success";
     }
 
-    @RequestMapping("/addNote")
-    public String index(HttpServletRequest request) {
-        String orderId = request.getParameter("orderId");
-        String tagName = request.getParameter("tagName");
-        noteService.addTag(orderId, tagName);
-        return "redirect:/";
+    @RequestMapping("/addTag")
+    @ResponseBody
+    public String addTag(@RequestParam String noteId, @RequestParam String name) {
+        noteService.addTag(noteId, name);
+        return "success";
     }
 
     @RequestMapping("/init")
