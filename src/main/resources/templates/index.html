@@ -18,7 +18,13 @@
         </div>
     </form>
 </div>
-<div class="search-tag"><a class="btn btn-info btn-search" href="/allTags">根据标签查找</a></div>
+
+<div class="search-tag">
+    <div th:if="${searchByTags}">
+        <span th:each="tag:${selectedTags}" class="tag label label-primary" th:text="${tag.name}"></span>
+    </div>
+    <a class="btn btn-info btn-search" href="/allTags">根据标签查找</a>
+</div>
 <div>
     <table class="table table-striped table-hover" style="width: 100%">
         <tr class="header-row">
@@ -42,7 +48,7 @@
     </table>
 </div>
 <div class="nav-div">
-    <nav aria-label="Page navigation">
+    <nav aria-label="Page navigation" th:if="${!searchByTags}">
         <ul class="pagination">
             <li th:if="${(currentPage - 1) < 0}" class="disabled">
                 <span aria-label="Previous">

@@ -16,4 +16,7 @@ public interface NoteDao extends JpaRepository<Note, Integer> {
     Page<Note> findByTitleContaining(String title, Pageable pageable);
 
     Page<Note> findByTagsContaining(Tag tag, Pageable pageable);
+
+    List<Note> findByTagsContaining(Tag tag);
+
 }

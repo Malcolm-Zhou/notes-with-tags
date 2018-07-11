@@ -1,5 +1,7 @@
 package com.malcolm.controller;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.malcolm.bean.Note;
 import com.malcolm.bean.Tag;
 import com.malcolm.service.NoteService;
@@ -7,6 +9,7 @@ import com.malcolm.service.TagService;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -14,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,18 +42,39 @@ public class HomeController {
         model.addAttribute("currentPage", page);
         model.addAttribute("navUrlPrefix", "/searchByTitle?title=" + title + "&page=");
         model.addAttribute("title", title);
+        model.addAttribute("searchByTags", false);
         return "index";
     }
 
     @RequestMapping("/searchByTag")
     public String searchByTag(@RequestParam final String id, @RequestParam(required = false, defaultValue = "0") final Integer page, Model model) {
-        Page<Note> notePage = noteService.findByTagsContaining(id, page);
+        Page<Note> notePage = noteService.findByTagContaining(id, page);
         List<Note> notes = notePage.getContent();
         int totalPages = notePage.getTotalPages();
         model.addAttribute("notes", notes);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", page);
         model.addAttribute("navUrlPrefix", "/searchByTag?id=" + id + "&page=");
+        model.addAttribute("searchByTags", false);
+        return "index";
+    }
+
+    @RequestMapping("/searchByTags")
+    public String searchByTags(@RequestParam("selectedTags") String selectedTags, Model model) {
+
+
+        Gson gson = new Gson();
+        List<Tag> tags = gson.fromJson(selectedTags, new TypeToken<List<Tag>>() {}.getType());
+
+        if (CollectionUtils.isEmpty(tags)) {
+            return "redirect:/";
+        }
+        List<String> ids = tags.stream().map(tag -> tag.getId().toString()).collect(Collectors.toList());
+        List<Note> notes = noteService.findByTags(ids);
+
+        model.addAttribute("notes", notes);
+        model.addAttribute("selectedTags", tags);
+        model.addAttribute("searchByTags", true);
         return "index";
     }
 

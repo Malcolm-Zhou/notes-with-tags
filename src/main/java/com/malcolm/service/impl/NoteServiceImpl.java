@@ -43,11 +43,21 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public Page<Note> findByTagsContaining(String tagId, Integer page) {
+    public Page<Note> findByTagContaining(String tagId, Integer page) {
         Tag tag = tagService.getById(tagId);
         String size = env.getProperty("paging.size");
         Pageable pageable = PageRequest.of(page, Integer.valueOf(size), Sort.Direction.ASC, "id");
         return noteDao.findByTagsContaining(tag, pageable);
+    }
+
+    @Override
+    public List<Note> findByTags(List<String> tagIds) {
+        List<Tag> tags = tagIds.stream().map(tagId -> tagService.getById(tagId)).collect(Collectors.toList());
+
+        List<List<Note>> lists = tags.stream().map(tag -> noteDao.findByTagsContaining(tag)).collect(Collectors.toList());
+        List<Note> result = lists.get(0);
+        lists.forEach(result::retainAll);
+        return result;
     }
 
     public void addTag(String noteId, String tagName) {

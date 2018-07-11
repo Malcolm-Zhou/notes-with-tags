@@ -4,6 +4,7 @@ import com.malcolm.bean.Note;
 import com.malcolm.bean.Tag;
 import com.malcolm.repository.TagDao;
 import com.malcolm.service.TagService;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -21,7 +22,8 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<Tag> findAll() {
-        return tagDao.findAll();
+        Sort sort = new Sort(Sort.Direction.ASC,"name");
+        return tagDao.findAll(sort);
     }
 
 

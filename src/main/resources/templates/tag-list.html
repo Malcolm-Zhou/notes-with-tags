@@ -2,18 +2,87 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>按标签搜索</title>
 </head>
 <body>
-    <div class="col-md-2"></div>
+<div id="app">
+    <div class="col-md-2">
+        <div class="col-md-12">
+            <form hidden="hidden" id="search-form" action="/searchByTags" method="post">
+                <input name="selectedTags" id="selectedTags">
+            </form>
+            <button class="btn btn-sm btn-success" v-on:click="search()">搜索</button>
+        </div>
+    </div>
     <div class="col-md-8">
-        <ul>
-            <li class="tag btn btn-primary btn-sm" th:each="tag:${tags}" th:text="${tag.name}" th:tag-id="${tag.id}"></li>
-        </ul>
+        <div id="selected-tags-list" class="col-md-12" v-cloak>
+            <div class="col-md-2" v-for="tag in selectedTags">
+                <div  class="tag btn btn-danger btn-sm" style="display: inline-block;"
+                      v-on:click="removeSelectedTag(tag)">
+                    {{tag.name}}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 tag-list">
+            <div class="col-md-2" v-for="tag in tags">
+                <div class="tag btn btn-primary btn-sm "
+                     v-on:click="addSelectedTag(tag)">{{tag.name}}
+                </div>
+            </div>
+        </div>
+
     </div>
     <div class="col-md-2"></div>
+</div>
+
 </body>
 <link rel="stylesheet" href="/static/css/bootstrap.css">
+<style>
+    [v-cloak] {
+        display: none;
+    }
+
+    div.tag{
+        width: 100%;
+    }
+
+    div.tag-list{
+        margin-top: 50px;
+    }
+
+
+
+</style>
 <script src="/static/js/jquery.min.js"></script>
 <script src="/static/js/bootstrap.js"></script>
+<script src="/static/js/vue.js"></script>
+<script th:inline="javascript">
+    let vm = new Vue({
+        el: "#app",
+        data: {
+            selectedTags: [],
+            tags: [[${tags}]],
+        },
+        mounted: function () {
+            //页面加载完成后执行
+        },
+        methods: {
+            addSelectedTag: function (tag, e) {
+                if ($.inArray(tag, this.selectedTags) === -1) {
+                    this.selectedTags.push(tag);
+                }
+            },
+            removeSelectedTag: function (tag, e) {
+                let index = $.inArray(tag, this.selectedTags);
+                this.selectedTags.splice(index, 1);
+            },
+            search: function () {
+                $('#selectedTags').val(JSON.stringify(this.selectedTags));
+                setTimeout(function () {
+                    $('#search-form').submit();
+                }, 200);
+            }
+        }
+    });
+</script>
 </html>
