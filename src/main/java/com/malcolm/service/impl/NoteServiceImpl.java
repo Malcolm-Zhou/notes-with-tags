@@ -5,6 +5,7 @@ import com.malcolm.bean.Tag;
 import com.malcolm.repository.NoteDao;
 import com.malcolm.service.NoteService;
 import com.malcolm.service.TagService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +30,20 @@ public class NoteServiceImpl implements NoteService {
 
     @Resource
     private Environment env;
+
+    @Override
+    public Integer addNote(String title) {
+        Note note = new Note();
+        note.setTitle(title);
+        noteDao.save(note);
+        System.out.println(note.getId());
+        return note.getId();
+    }
+
+    @Override
+    public void deleteNote(Integer id) {
+        noteDao.deleteById(id);
+    }
 
     @Override
     public Page<Note> findByTitlePaging(String title, Integer page) {
@@ -61,6 +76,10 @@ public class NoteServiceImpl implements NoteService {
     }
 
     public void addTag(String noteId, String tagName) {
+        if (StringUtils.isBlank(tagName)) {
+            return;
+        }
+
         Tag tag = tagService.findByName(tagName);
         if (null == tag) {
             tag = tagService.createTag(new Tag(tagName));

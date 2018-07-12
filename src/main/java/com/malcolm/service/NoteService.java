@@ -10,6 +10,10 @@ import java.util.List;
  */
 public interface NoteService {
 
+    Integer addNote(String title);
+
+    void deleteNote(Integer id);
+
     Page<Note> findByTitlePaging(String title, Integer page);
 
     Note getById(String id);

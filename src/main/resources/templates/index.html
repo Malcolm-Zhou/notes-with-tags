@@ -28,22 +28,33 @@
 <div>
     <table class="table table-striped table-hover" style="width: 100%">
         <tr class="header-row">
-            <th class="text-center col-md-5">标题</th>
+            <th class="text-center col-md-5">标题<button id="add-note-btn" class="btn btn-sm btn-success" data-toggle="modal"
+                                                       data-target="#add-note-modal"><span class="glyphicon glyphicon-plus"></span></button>
+            </th>
             <th class="text-center col-md-4">标签</th>
             <th class="text-center col-md-1"></th>
             <th class="text-center col-md-1">创建</th>
             <th class="text-center col-md-1">修改</th>
         </tr>
         <tr th:each="note:${notes}" class="text-center">
-            <td class="col-md-5"><a th:href="'/updateNotePage?id=' + ${note.id}"><span
-                    th:text="${note.title}"></span></a></td>
+            <td class="col-md-5 note-title">
+                <a class="" th:href="'/updateNotePage?id=' + ${note.id}">
+                    <span th:text="${note.title}"></span>
+                </a>
+                <span data-toggle="modal" data-target="#confirm-delete-modal" th:data-note-id="${note.id}" th:data-note-title="${note.title}"
+                      class="delete-note-btn glyphicon glyphicon-remove"></span>
+            </td>
             <td class="col-md-4"><a th:href="'/searchByTag?id=' + ${tag.id}" th:each="tag:${note.tags}"><span
                     class="tag label label-primary" th:text="${tag.name}"></span></a></td>
             <td class="col-md-1">
-                <button type="button" class="btn btn-success btn-sm" th:data-note-id="${note.id}" data-toggle="modal" data-target="#add-tag-modal">添加标签</button>
+                <button type="button" class="btn btn-success btn-sm" th:data-note-id="${note.id}" data-toggle="modal"
+                        data-target="#add-tag-modal"><span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
+                </button>
             </td>
-            <td class="col-md-1" th:title="${note.createTime}" th:text="${#dates.format(note.createTime, 'MM-dd HH:mm')}"></td>
-            <td class="col-md-1" th:title="${note.createTime}" th:text="${#dates.format(note.modifyTime, 'MM-dd HH:mm')}"></td>
+            <td class="col-md-1" th:title="${note.createTime}"
+                th:text="${#dates.format(note.createTime, 'MM-dd HH:mm')}"></td>
+            <td class="col-md-1" th:title="${note.createTime}"
+                th:text="${#dates.format(note.modifyTime, 'MM-dd HH:mm')}"></td>
         </tr>
     </table>
 </div>
@@ -56,14 +67,16 @@
                 </span>
             </li>
             <li th:if="${(currentPage - 1) >= 0}">
-                <a href="#" th:href="${navUrlPrefix + (currentPage - 1) }" th:class="${(currentPage - 1) < 0 ? 'disabled' : '' }" aria-label="Previous">
+                <a href="#" th:href="${navUrlPrefix + (currentPage - 1) }"
+                   th:class="${(currentPage - 1) < 0 ? 'disabled' : '' }" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
-            <li th:class="${currentPage+1 == pageIndex?'active':''}" th:each="pageIndex:${#numbers.sequence(1,totalPages)}">
+            <li th:class="${currentPage+1 == pageIndex?'active':''}"
+                th:each="pageIndex:${#numbers.sequence(1,totalPages)}">
                 <a href="#" th:href="${navUrlPrefix + (pageIndex - 1)}" th:text="${pageIndex}"></a>
             </li>
-            <li  th:if="${(currentPage + 1) < totalPages}">
+            <li th:if="${(currentPage + 1) < totalPages}">
                 <a href="#" th:href="${navUrlPrefix + (currentPage + 1)}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
@@ -81,8 +94,9 @@
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">添加标签</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">添加标签</h4>
             </div>
             <div class="modal-body">
                 <div>
@@ -98,6 +112,49 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">取消</button>
                 <button type="button" class="btn btn-success" onclick="addTag()">添加</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="add-note-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <form class="modal-content" action="/addNote" method="post" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">添加笔记</h4>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <div class="form-group">
+                        <label for="note-title-add" class="control-label">笔记标题:</label>
+                        <input id="note-title-add" type="text" class="form-control" name="title" required="required">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">取消</button>
+                <button type="submit" class="btn btn-success">添加</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="confirm-delete-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content" action="/deleteNote" method="post">
+            <div class="modal-body">
+                <div>
+                    <div class="form-group">
+                        <p id="note-title-delete"></p>
+                    </div>
+                    <div class="form-group" hidden="hidden">
+                        <input type="text" class="form-control" name="id" id="note-id-delete">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-success" onclick="deleteNote()">删除</button>
             </div>
         </div>
     </div>

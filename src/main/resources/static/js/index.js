@@ -18,6 +18,17 @@ function addTag() {
         }
     });
 }
+function deleteNote() {
+    let noteId = $('#note-id-delete').val();
+    let url = `/deleteNote?id=${noteId}`;
+    $.ajax({
+        url: url,
+        method: 'get',
+        success: function (result) {
+            document.location.reload();
+        }
+    });
+}
 
 
 $(document).keyup(function (e) {
@@ -25,5 +36,14 @@ $(document).keyup(function (e) {
     if (e.keyCode === 13 && name.length > 0) {
         addTag();
     }
+});
+
+$('#confirm-delete-modal').on('show.bs.modal', function (event) {
+    let button = $(event.relatedTarget);
+    let id = button.data('note-id');
+    let title = button.data('note-title');
+    let modal = $(this);
+    modal.find('#note-title-delete').text(`要删除 ${title} 吗？`);
+    modal.find('#note-id-delete').val(id);
 });
 

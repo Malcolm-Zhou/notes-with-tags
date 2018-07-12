@@ -6,6 +6,7 @@ import com.malcolm.bean.Note;
 import com.malcolm.bean.Tag;
 import com.malcolm.service.NoteService;
 import com.malcolm.service.TagService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -64,7 +65,8 @@ public class HomeController {
 
 
         Gson gson = new Gson();
-        List<Tag> tags = gson.fromJson(selectedTags, new TypeToken<List<Tag>>() {}.getType());
+        List<Tag> tags = gson.fromJson(selectedTags, new TypeToken<List<Tag>>() {
+        }.getType());
 
         if (CollectionUtils.isEmpty(tags)) {
             return "redirect:/";
@@ -85,11 +87,32 @@ public class HomeController {
         return "note-details";
     }
 
+    @RequestMapping("/addNote")
+    public String addNote(@RequestParam final String title) {
+        Integer id = noteService.addNote(title);
+        return "redirect:/updateNotePage?id=" + id;
+    }
+
+    @RequestMapping("/deleteNote")
+    @ResponseBody
+    public String deleteNote(@RequestParam(defaultValue = "-1") final String id) {
+        if (!id.equals("-1")) {
+
+            Note note = noteService.getById(id);
+            note.setTags(null);
+            noteService.deleteNote(Integer.valueOf(id));
+        }
+        return "success";
+    }
+
     @RequestMapping("/updateNote")
     public String updateNote(HttpServletRequest request) {
         String noteId = request.getParameter("noteId");
         String title = request.getParameter("title");
         String content = request.getParameter("content");
+        if (StringUtils.isBlank(title)) {
+            return "redirect:/deleteNote?id=" + noteId;
+        }
         Note note = new Note();
         note.setId(Integer.valueOf(noteId));
         note.setTitle(title);

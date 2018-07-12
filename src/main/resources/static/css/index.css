@@ -2,16 +2,39 @@
     margin: 0px 1px;
 }
 
-.header-row{
+.header-row {
     background-color: #337ab7 !important;
 }
-.header-row th{
+
+.header-row th {
     color: #fff;
 }
 
-.search-bar{
+.search-bar {
     float: left;
 }
-.search-tag{
+
+.search-tag {
     float: right;
+}
+
+#add-note-btn {
+    position: relative;
+    left: 10px;
+}
+
+.delete-note-btn {
+    position: relative;
+    left: 10px;
+    color: #fff;
+    background-color: #d9534f;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 5px;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.note-title:hover > span.delete-note-btn {
+    opacity: 1;
 }
