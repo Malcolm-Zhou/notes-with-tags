@@ -21,6 +21,9 @@ public class Note {
 
     private String title;
 
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name=" content", columnDefinition="CLOB")
     private String content;
 
     @ManyToMany(cascade = CascadeType.ALL)

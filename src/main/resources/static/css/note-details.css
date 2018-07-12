@@ -1,3 +1,17 @@
 .tag {
     margin: 0px 3px;
 }
+
+.text-adaption {
+    height: 34px;
+    overflow: hidden;
+    padding: 5px 10px;
+    resize: none;
+    line-height: 24px;
+    font-size: 12px;
+    color: #666;
+    border: 1px solid #ccc;
+    outline: 0 none;
+    border-radius: 3px;
+    box-sizing: border-box;
+}

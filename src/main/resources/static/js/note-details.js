@@ -28,3 +28,26 @@ $.each(allTags, function (index, tag) {
         }
     })
 });
+
+//自动刷新Markdown预览
+$('#content').keyup(function () {
+    let content = $(this).val();
+    $.ajax({
+        url: "/refreshMD",
+        method: 'post',
+        data: {'content': content},
+        success: function (result) {
+            $('#mdHTML').html(result);
+        }
+    });
+});
+
+//文本框高度自适应
+let textarea = document.getElementById('content');
+textarea.style.height = 'auto';
+textarea.style.height = textarea.scrollHeight + "px";
+
+textarea.onkeyup = function() {
+    this.style.height = 'auto';
+    this.style.height = this.scrollHeight + "px";
+};

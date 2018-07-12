@@ -5,35 +5,53 @@
     <title>编辑笔记</title>
 </head>
 <body>
-<div class="col-md-2"></div>
-<div class="col-md-8">
-    <form action="/updateNote" method="post">
-        <div hidden="hidden">
-            <input id="noteId" name="noteId" th:value="${note.id}">
-        </div>
-        <div class="form-group">
-            <label for="title">标题</label>
-            <input type="text" class="form-control" id="title" name="title" th:value="${note.title}" required="required">
-        </div>
-        <div class="form-group">
-            <label>标签</label>
-            <button type="button" class="tag btn btn-primary btn-sm" th:each="tag:${note.tags}" th:text="${tag.name}" th:tag-id="${tag.id}"></button>
-            <span style="float: right">
+<form action="/updateNote" method="post" id="update-note-form">
+    <div class="col-md-12">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div>
+                <div hidden="hidden">
+                    <input id="noteId" name="noteId" th:value="${note.id}">
+                </div>
+                <div class="form-group">
+                    <label for="title">标题</label>
+                    <input type="text" class="form-control" id="title" name="title" th:value="${note.title}" required="required">
+                </div>
+                <div class="form-group">
+                    <label>标签</label>
+                    <button type="button" class="tag btn btn-primary btn-sm" th:each="tag:${note.tags}" th:text="${tag.name}" th:tag-id="${tag.id}"></button>
+                    <span style="float: right">
                 <input type="checkbox" id="delete-tag-mode"><label for="delete-tag-mode">删除模式</label>
             </span>
+                </div>
+            </div>
         </div>
-        <div style="margin-bottom: 10px;">
-            <label for="content">内容</label>
-            <textarea class="form-control" id="content" name="content" rows="20" th:utext="${note.content}"></textarea>
-        </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-success">保存</button>
-            <a href="/" class="btn btn-default">返回列表</a>
-        </div>
+        <div class="col-md-2"></div>
+    </div>
 
-    </form>
-</div>
-<div class="col-md-2"></div>
+    <div class="col-md-12">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div class="form-group">
+                <button type="submit" class="btn btn-success">保存</button>
+                <a href="/" class="btn btn-default">返回列表</a>
+            </div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+    <div class="col-md-12">
+        <div class="col-md-6" style="margin-bottom: 10px;">
+            <label for="content">内容</label>
+            <textarea class="form-control text-adaption" id="content" name="content" rows="20" th:utext="${note.content}"></textarea>
+        </div>
+        <div class="col-md-6" style="margin-bottom: 10px;">
+            <label for="content">HTML</label>
+            <div id="mdHTML" th:utext="${mdHTML}"></div>
+        </div>
+    </div>
+</form>
+
+
 
 </body>
 <link rel="stylesheet" href="/static/css/bootstrap.css">
