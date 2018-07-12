@@ -224,6 +224,7 @@ public class HomeController {
                 "           ```\n" +
                 "\n" +
                 "\n" +
+                "\n" +
                 "```flow\n" +
                 "st=>start: 开始\n" +
                 "op=>operation: My Operation\n" +
@@ -232,7 +233,7 @@ public class HomeController {
                 "st->op->cond\n" +
                 "cond(yes)->e\n" +
                 "cond(no)->op\n" +
-                "&```\n";
+                "```";
 
         Tag tag1 = new Tag("tag1");
         Tag tag2 = new Tag("tag2");
