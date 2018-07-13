@@ -15,3 +15,7 @@
     border-radius: 3px;
     box-sizing: border-box;
 }
+
+.zoom-in {
+    transform: scale(2);
+}

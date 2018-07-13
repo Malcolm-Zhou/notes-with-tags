@@ -35,6 +35,7 @@
             <div class="form-group">
                 <button type="submit" class="btn btn-success">保存</button>
                 <a href="/" class="btn btn-default">返回列表</a>
+                <button type="button" onclick="toPDF()" id="save-pdf-btn" class="btn btn-info">生成PDF</button>
             </div>
         </div>
         <div class="col-md-2"></div>
@@ -60,5 +61,9 @@
 <script src="/static/js/bootstrap.js"></script>
 <script src="/static/js/raphael.min.js"></script>
 <script src="/static/js/flowchart.js"></script>
+<script src="/static/js/canvg/canvg2.js"></script>
+<script src="/static/js/canvg/html2canvas.js"></script>
+<script src="/static/js/canvg/jspdf.min.js"></script>
+<script src="/static/js/canvg/canvas2image.js"></script>
 <script src="/static/js/note-details.js"></script>
 </html>

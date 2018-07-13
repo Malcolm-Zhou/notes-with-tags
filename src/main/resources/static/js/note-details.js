@@ -7,13 +7,56 @@ function drawFlowChart() {
     let i = 1;
     for (const div of divs) {
 
-        $(div).attr('id', `flowchart${i}`)
+        $(div).attr('id', `flowchart${i}`);
         let chartCode = HTMLDecode($(div).html());
         let diagram = flowchart.parse(chartCode);
         $(div).html('');
         diagram.drawSVG(`flowchart${i}`);
         i++;
     }
+}
+
+//生成PDF
+function toPDF() {
+    let targetDom = $("#mdHTML");
+    let resolution = 0.225;
+    svg2canvas(targetDom);
+    html2canvas(targetDom, {
+        onrendered: function (canvas) {
+            let imgData = canvas.toDataURL('image/png');
+            let img = new Image();
+            img.src = imgData;
+            img.onload = function () {
+                let doc;
+                if (this.width > this.height) {
+                    doc = new jsPDF('l', 'mm', [this.width * resolution, this.height * resolution]);
+                } else {
+                    doc = new jsPDF('p', 'mm', [this.width * resolution, this.height * resolution]);
+                }
+                doc.addImage(imgData, 'png', 0, 0, this.width * resolution, this.height * resolution);
+                doc.save('pdf_' + new Date().getTime() + '.pdf');
+            };
+
+        },
+        background: "#fff",
+    });
+}
+
+
+
+function svg2canvas(targetElem) {
+    let svgElem = targetElem.find('svg');
+    svgElem.each(function (index, node) {
+        let parentNode = node.parentNode;
+        //由于现在的IE不支持直接对svg标签node取内容，所以需要在当前标签外面套一层div，通过外层div的innerHTML属性来获取
+        let tempNode = document.createElement('div');
+        tempNode.appendChild(node);
+        let svg = tempNode.innerHTML;
+        let canvas = document.createElement('canvas');
+        //转换
+        canvg(canvas, svg);
+        parentNode.appendChild(canvas);
+    });
 }
 
 //HTML反转义

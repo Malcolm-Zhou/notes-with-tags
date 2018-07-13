@@ -15,13 +15,17 @@ import java.util.Arrays;
  */
 public class MarkdownUtil {
 
-    public static String flexmark(String content) {
-        MutableDataSet options = new MutableDataSet();
+    private static MutableDataSet options;
+
+    static {
+        options = new MutableDataSet();
         options.setFrom(ParserEmulationProfile.MARKDOWN);
 
         // enable table parse!
         options.set(Parser.EXTENSIONS, Arrays.asList(TablesExtension.create(), AnchorLinkExtension.create()));
+    }
 
+    public static String flexmark(String content) {
         Parser parser = Parser.builder(options).build();
         HtmlRenderer renderer = HtmlRenderer.builder(options).build();
 
