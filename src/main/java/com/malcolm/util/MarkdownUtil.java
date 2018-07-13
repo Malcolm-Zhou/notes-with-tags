@@ -1,13 +1,14 @@
 package com.malcolm.util;
 
 import com.vladsch.flexmark.ast.Node;
+import com.vladsch.flexmark.ext.anchorlink.AnchorLinkExtension;
 import com.vladsch.flexmark.ext.tables.TablesExtension;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.parser.ParserEmulationProfile;
 import com.vladsch.flexmark.util.options.MutableDataSet;
 
-import java.util.Collections;
+import java.util.Arrays;
 
 /**
  * @author malcolm
@@ -19,7 +20,7 @@ public class MarkdownUtil {
         options.setFrom(ParserEmulationProfile.MARKDOWN);
 
         // enable table parse!
-        options.set(Parser.EXTENSIONS, Collections.singletonList(TablesExtension.create()));
+        options.set(Parser.EXTENSIONS, Arrays.asList(TablesExtension.create(), AnchorLinkExtension.create()));
 
         Parser parser = Parser.builder(options).build();
         HtmlRenderer renderer = HtmlRenderer.builder(options).build();

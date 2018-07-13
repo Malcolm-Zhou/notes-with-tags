@@ -98,7 +98,6 @@ public class HomeController {
     }
 
 
-
     @RequestMapping("/addNote")
     public String addNote(@RequestParam final String title) {
         Integer id = noteService.addNote(title);
@@ -219,9 +218,10 @@ public class HomeController {
                 "\n" +
                 "单行代码    `代码内容`\n" +
                 "\n" +
-                "多行代码    ```\n" +
-                "           代码内容\n" +
-                "           ```\n" +
+                "多行代码    \n" +
+                "```\n" +
+                "代码内容\n" +
+                " ```" +
                 "\n" +
                 "\n" +
                 "\n" +

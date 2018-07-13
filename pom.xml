@@ -84,6 +84,13 @@
 			<artifactId>flexmark-ext-tables</artifactId>
 			<version>0.34.6</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.vladsch.flexmark/flexmark-ext-anchorlink -->
+		<dependency>
+			<groupId>com.vladsch.flexmark</groupId>
+			<artifactId>flexmark-ext-anchorlink</artifactId>
+			<version>0.34.6</version>
+		</dependency>
+
 		<!--markdown to html end-->
 
 
