@@ -84,7 +84,7 @@ public class HomeController {
     @RequestMapping("/updateNotePage")
     public String updateNote(@RequestParam final String id, Model model) {
         Note note = noteService.getById(id);
-        String mdHTML = MarkdownUtil.pegDown(note.getContent());
+        String mdHTML = MarkdownUtil.flexmark(note.getContent());
         model.addAttribute("note", note);
         model.addAttribute("mdHTML", mdHTML);
         return "note-details";
@@ -93,7 +93,7 @@ public class HomeController {
     @RequestMapping("/refreshMD")
     @ResponseBody
     public String ajaxRefreshMarkDown(@RequestParam final String content) {
-        String mdHTML = MarkdownUtil.pegDown(content);
+        String mdHTML = MarkdownUtil.flexmark(content);
         return mdHTML;
     }
 

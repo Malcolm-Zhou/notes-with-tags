@@ -3,7 +3,7 @@ let noteId = $("#noteId").val();
 
 function drawFlowChart() {
     //flowchat 画流程图
-    let divs = $('.flow');
+    let divs = $('.language-flow');
     let i = 1;
     for (const div of divs) {
 
