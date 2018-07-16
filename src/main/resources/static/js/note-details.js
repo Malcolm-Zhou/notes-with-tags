@@ -18,46 +18,43 @@ function drawFlowChart() {
 
 //生成PDF
 function toPDF() {
-    let targetDom = $("#mdHTML");
+    let targetDom = $('#copyDiv');
+    targetDom.html($("#mdHTML").html());
+    let w = targetDom.width();
+    let h = targetDom.height();
+    let canvas = document.createElement("canvas");
+    let times = 1;//缩放倍数
+    canvas.width = w * times;
+    canvas.height = h * times;
+    canvas.style.width = w + "px";
+    canvas.style.height = h + "px";
+    let context = canvas.getContext("2d");
+    //然后将画布缩放，将图像放大两倍画到画布上
+    context.scale(times, times);
     let resolution = 0.225;
-    svg2canvas(targetDom);
     html2canvas(targetDom, {
-        onrendered: function (canvas) {
-            let imgData = canvas.toDataURL('image/png');
-            let img = new Image();
-            img.src = imgData;
-            img.onload = function () {
-                let doc;
-                if (this.width > this.height) {
-                    doc = new jsPDF('l', 'mm', [this.width * resolution, this.height * resolution]);
-                } else {
-                    doc = new jsPDF('p', 'mm', [this.width * resolution, this.height * resolution]);
-                }
-                doc.addImage(imgData, 'png', 0, 0, this.width * resolution, this.height * resolution);
-                doc.save('pdf_' + new Date().getTime() + '.pdf');
-            };
+        canvas: canvas,
+        useCORS: true
+    }).then(function (canvas) {
 
-        },
-        background: "#fff",
+        let url = canvas.toDataURL('image/png');
+        let img = new Image();
+        img.src = url;
+        targetDom.html(canvas);
+        img.onload = function () {
+            let doc;
+            if (this.width > this.height) {
+                doc = new jsPDF('l', 'mm', [this.width * resolution, this.height * resolution]);
+            } else {
+                doc = new jsPDF('p', 'mm', [this.width * resolution, this.height * resolution]);
+            }
+            doc.addImage(url, 'png', 0, 0, this.width * resolution, this.height * resolution);
+            doc.save('pdf_' + new Date().getTime() + '.pdf');
+        };
+
     });
 }
 
-
-
-function svg2canvas(targetElem) {
-    let svgElem = targetElem.find('svg');
-    svgElem.each(function (index, node) {
-        let parentNode = node.parentNode;
-        //由于现在的IE不支持直接对svg标签node取内容，所以需要在当前标签外面套一层div，通过外层div的innerHTML属性来获取
-        let tempNode = document.createElement('div');
-        tempNode.appendChild(node);
-        let svg = tempNode.innerHTML;
-        let canvas = document.createElement('canvas');
-        //转换
-        canvg(canvas, svg);
-        parentNode.appendChild(canvas);
-    });
-}
 
 //HTML反转义
 /**
