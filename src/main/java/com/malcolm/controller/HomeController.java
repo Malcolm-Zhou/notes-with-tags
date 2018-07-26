@@ -6,6 +6,7 @@ import com.malcolm.bean.Note;
 import com.malcolm.bean.Tag;
 import com.malcolm.service.NoteService;
 import com.malcolm.service.TagService;
+import com.malcolm.util.CompactAlgorithm;
 import com.malcolm.util.MarkdownUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
@@ -17,7 +18,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -259,6 +266,50 @@ public class HomeController {
         List<Tag> allTags = tagService.findAll();
         model.addAttribute("tags", allTags);
         return "tag-list";
+    }
+
+    @RequestMapping("/outputDB")
+    @ResponseBody
+    public String downLoadFile(HttpServletResponse response) {
+        String fileName = "db.zip";
+
+        //压缩文件
+        String sourcePath = "db"; //要压缩的文件所在路径
+        File file = new File(sourcePath);
+        File targetFile = new File(fileName);
+        new CompactAlgorithm(targetFile).zipFiles(file);
+
+
+        if (targetFile.exists()) {
+            // 设置强制下载打开
+            response.setContentType("application/force-download");
+            // 文件名乱码, 使用new String() 进行反编码
+            response.addHeader("Content-Disposition", "attachment;fileName=" + fileName);
+
+            // 读取文件
+            BufferedInputStream bi = null;
+            try {
+                byte[] buffer = new byte[1024];
+                bi = new BufferedInputStream(new FileInputStream(targetFile));
+                ServletOutputStream outputStream = response.getOutputStream();
+                int i = -1;
+                while (-1 != (i = bi.read(buffer))) {
+                    outputStream.write(buffer, 0, i);
+                }
+                return "";
+            } catch (Exception e) {
+                return "程序猿真不知道为什么, 反正就是下载失败了";
+            } finally {
+                if (bi != null) {
+                    try {
+                        bi.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        return "文件不存在";
     }
 
 
